@@ -45,9 +45,13 @@ class BaseNewsSpider(scrapy.Spider):
             for article in article_results_page.parse_articles():
                 if session.query(models.Article).filter(
                         models.Article.news_hash == article['news_hash'],
-                        models.Article.created_at_timestamp == article['created_at_timestamp']
+                        models.Article.created_at_timestamp == int(article['created_at_timestamp'])
                 ).first():
                     continue
+                else:
+                    self.logger.info(f"New article found: {article['news_hash']}")
+
+                continue
 
                 article['journalist_id'] = 1
                 article['category_id'] = kwargs['source']['category_id']
