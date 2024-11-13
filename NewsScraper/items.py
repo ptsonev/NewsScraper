@@ -7,9 +7,8 @@ import scrapy
 
 
 class ArticleItem(scrapy.Item):
-
     title = scrapy.Field()
-    created_at = scrapy.Field()
+    created_at_timestamp = scrapy.Field()
     source_url = scrapy.Field()
     content = scrapy.Field()
     slug = scrapy.Field()

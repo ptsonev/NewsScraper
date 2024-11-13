@@ -17,4 +17,8 @@ class ArticleItemLoader(ItemLoader):
             request_hash = fingerprint(Request(source_url)).hex()
             self.replace_value('news_hash', request_hash)
 
+        if created_at := self.get_output_value('created_at_timestamp'):
+            # TODO: check if it is already a timestamp
+            self.replace_value('created_at_timestamp', int(created_at.timestamp()))
+
         return super().load_item()

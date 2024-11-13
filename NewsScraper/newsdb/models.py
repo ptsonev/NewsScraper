@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import create_engine, Column, Integer, String, Text, Enum, ForeignKey, Boolean, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Text, Enum, ForeignKey, Boolean, DateTime, TIMESTAMP
 from sqlalchemy.orm import relationship, declarative_base, sessionmaker, scoped_session, Session as SessionType
 
 Base = declarative_base()
@@ -77,12 +77,15 @@ class Article(BaseMixin):
     title = Column(String(255), nullable=False)
     slug = Column(String(255), unique=True, nullable=False)
     content = Column(Text, nullable=False)
+    status = Column(Enum('draft', 'published', 'archived'), default='draft')
     journalist_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     category_id = Column(Integer, ForeignKey('categories.category_id'), nullable=False)
     city_id = Column(Integer, ForeignKey('cities.city_id'), nullable=False)
-    created_at = Column(DateTime, nullable=True)
-    status = Column(Enum('draft', 'published', 'archived'), default='draft')
-    updated_at = Column(DateTime, nullable=True)
+
+    created_at = Column(TIMESTAMP)
+    updated_at = Column(TIMESTAMP)
+    created_at_timestamp = Column(Integer, nullable=True)
+
     news_hash = Column(String(40), unique=True, nullable=False, primary_key=True)
     source_url = Column(String(2048), nullable=False)
 

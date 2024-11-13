@@ -1,10 +1,9 @@
 import logging
-from datetime import datetime
 from typing import Iterable
 
 import attr
+import dateparser
 import feedparser
-import pytz
 import web_poet
 from web_poet.pages import WebPage
 
@@ -56,7 +55,9 @@ class ArticleRssPage(ArticleResultsPage):
 
             item_loader.add_value('source_url', entry['link'])
             item_loader.add_value('title', entry['title'])
-            item_loader.add_value('created_at', datetime(*entry['published_parsed'][:6], tzinfo=pytz.utc))
+
+            parsed_date = dateparser.parse(entry['published'])
+            item_loader.add_value('created_at_timestamp', parsed_date)
 
             for media in entry.get('media_content', []):
                 if media['medium'] == 'image':

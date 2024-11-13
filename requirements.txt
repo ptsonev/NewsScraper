@@ -19,3 +19,4 @@ pytz
 beautifulsoup4
 tenacity
 jsonpath-ng
+dateparser

@@ -46,7 +46,7 @@ class BaseNewsSpider(scrapy.Spider):
             with models.Session() as session:
                 if session.query(models.Article).filter(
                         models.Article.news_hash == article['news_hash'],
-                        models.Article.created_at == article['created_at']
+                        models.Article.created_at_timestamp == article['created_at_timestamp']
                 ).first():
                     continue
 

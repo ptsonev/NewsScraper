@@ -6,6 +6,7 @@ import importlib.resources as pkg_resources
 import json
 import re
 from collections import defaultdict
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, NavigableString
@@ -38,8 +39,7 @@ class DefaultPipeline:
         if not item_adapter.get('slug'):
             path = urlparse(item_adapter['source_url']).path
             source_slug = path.rpartition('/')[2].partition('.')[0]
-            created_at_timestamp = int(item_adapter['created_at'].timestamp())
-            item_adapter['slug'] = f'{source_slug}-{created_at_timestamp}'
+            item_adapter['slug'] = f'{source_slug}-{item_adapter["created_at_timestamp"]}'
 
         content_bs = BeautifulSoup(item_adapter['content'], 'html.parser')
 
@@ -66,6 +66,8 @@ class MySQLPipeline:
         with models.Session() as session:
             try:
                 article_item = models.Article(**item)
+                article_item.created_at = datetime.fromtimestamp(article_item.created_at_timestamp, timezone.utc)
+
                 article_item = session.merge(article_item)
                 session.commit()
 
