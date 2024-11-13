@@ -40,7 +40,7 @@ class DefaultPipeline:
         if not item_adapter.get('slug'):
             path = urlparse(item_adapter['source_url']).path
             source_slug = path.rpartition('/')[2].partition('.')[0]
-            item_adapter['slug'] = f'{source_slug}-{item_adapter["created_at_timestamp"]}'
+            item_adapter['slug'] = f'{source_slug}-{item_adapter["created_at"]}'
 
         content_bs = BeautifulSoup(item_adapter['content'], 'html.parser')
 
@@ -72,7 +72,7 @@ class MySQLPipeline:
         with models.Session() as session:
             try:
                 article_item = models.Article(**item)
-                article_item.created_at = datetime.fromtimestamp(article_item.created_at_timestamp, timezone.utc)
+                article_item.created_at = datetime.fromtimestamp(article_item.created_at, timezone.utc)
 
                 article_item = session.merge(article_item)
                 session.commit()

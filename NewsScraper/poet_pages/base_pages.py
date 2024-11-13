@@ -57,7 +57,7 @@ class ArticleRssPage(ArticleResultsPage):
             item_loader.add_value('title', entry['title'])
 
             parsed_date = dateparser.parse(entry['published'])
-            item_loader.add_value('created_at_timestamp', parsed_date)
+            item_loader.add_value('created_at', parsed_date)
 
             for media in entry.get('media_content', []):
                 if media['medium'] == 'image':

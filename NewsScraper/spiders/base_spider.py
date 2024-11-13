@@ -1,7 +1,6 @@
 from typing import Iterable, Any
 
 import scrapy
-import sqlalchemy
 from scrapy import Request
 from scrapy.http import Response
 from scrapy.utils.defer import maybe_deferred_to_future
@@ -45,13 +44,7 @@ class BaseNewsSpider(scrapy.Spider):
 
             for article in article_results_page.parse_articles():
 
-                result = session.query(models.Article.article_id).filter(
-                    sqlalchemy.and_(
-                        models.Article.news_hash == article['news_hash'],
-                        models.Article.created_at_timestamp == int(article['created_at_timestamp'])
-                    )
-                ).first()
-
+                result = session.query(models.Article.article_id).filter(models.Article.news_hash == article['news_hash']).first()
                 if result is not None:
                     continue
 

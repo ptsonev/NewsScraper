@@ -84,7 +84,6 @@ class Article(BaseMixin):
 
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
-    created_at_timestamp = Column(Integer, nullable=True)
 
     news_hash = Column(String(40), unique=True, nullable=False, primary_key=True)
     source_url = Column(String(2048), nullable=False)
