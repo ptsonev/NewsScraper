@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import create_engine, Column, Integer, String, Text, Enum, ForeignKey, Boolean, DateTime, TIMESTAMP
-from sqlalchemy.orm import relationship, declarative_base, sessionmaker, scoped_session, Session as SessionType
+from sqlalchemy import Column, Integer, String, Text, Enum, ForeignKey, Boolean, DateTime, TIMESTAMP, create_engine
+from sqlalchemy.orm import relationship, declarative_base, Session as SessionType, sessionmaker, scoped_session
 
 Base = declarative_base()
 

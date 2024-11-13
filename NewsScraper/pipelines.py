@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup, NavigableString
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 from sqlalchemy.exc import SQLAlchemyError
+from twisted.internet.threads import deferToThread
 
 import NewsScraper.newsdb.models as models
 from NewsScraper.spiders.base_spider import BaseNewsSpider
@@ -57,12 +58,17 @@ class DefaultPipeline:
                 if reference_re.search(_string):
                     _string.replace_with('')
 
+        item_adapter['content'] = str(content_bs)
+
         return item
 
 
 class MySQLPipeline:
 
-    async def process_item(self, item, spider: BaseNewsSpider):
+    def process_item(self, item, spider: BaseNewsSpider):
+        return deferToThread(self._process_item, item, spider)
+
+    def _process_item(self, item, spider: BaseNewsSpider):
         with models.Session() as session:
             try:
                 article_item = models.Article(**item)

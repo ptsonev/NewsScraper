@@ -40,27 +40,26 @@ class BaseNewsSpider(scrapy.Spider):
                 )
 
     def parse_article_results(self, response: Response, article_results_page: ArticleResultsPage, **kwargs: Any) -> Any:
+        with models.Session() as session:
 
-        for article in article_results_page.parse_articles():
-
-            with models.Session() as session:
+            for article in article_results_page.parse_articles():
                 if session.query(models.Article).filter(
                         models.Article.news_hash == article['news_hash'],
                         models.Article.created_at_timestamp == article['created_at_timestamp']
                 ).first():
                     continue
 
-            article['journalist_id'] = 1
-            article['category_id'] = kwargs['source']['category_id']
-            article['city_id'] = kwargs['source']['city_id']
+                article['journalist_id'] = 1
+                article['category_id'] = kwargs['source']['category_id']
+                article['city_id'] = kwargs['source']['city_id']
 
-            yield Request(
-                url=article['source_url'],
-                cb_kwargs={
-                    'init_item': article,
-                },
-                callback=self.parse_article
-            )
+                yield Request(
+                    url=article['source_url'],
+                    cb_kwargs={
+                        'init_item': article,
+                    },
+                    callback=self.parse_article
+                )
 
     def parse_article(self, response: scrapy.http.Response, article_page: ArticlePage, **kwargs):
         yield article_page.to_item()
