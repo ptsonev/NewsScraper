@@ -64,6 +64,7 @@ class NyTimesParser:
         'AudioBlock',
         'InstagramEmbedBlock',
         'TwitterEmbedBlock',
+        'SlideshowBlock',
     }
 
     HEADERS = {
