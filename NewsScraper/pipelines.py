@@ -72,6 +72,7 @@ class MySQLPipeline:
         with models.Session() as session:
             try:
                 article_item = models.Article(**item)
+                article_item.content = article_item.content[0:65535]
                 article_item.created_at = datetime.fromtimestamp(article_item.created_at, timezone.utc)
 
                 article_item = session.merge(article_item)
